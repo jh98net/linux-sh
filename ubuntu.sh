@@ -115,7 +115,7 @@ EOF
   sudo apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
   sudo usermod -aG docker $USER
   sudo systemctl start docker
-  sudo systemctl enable docker.service
+  sudo systemctl enable docker
   sudo docker info
 }
 
@@ -158,9 +158,11 @@ install_lcmd() {
   dotnet tool install TinyFx.Tools.LinuxCmd --tool-path $MY_DOTNET_TOOLS_PATH --no-cache --add-source http://192.168.1.120:8081/repository/nuget-hosted
   # sudo ln -s /opt/dotnet/tools/lcmd /usr/local/bin/lcmd
   lcmd update -s http://192.168.1.120:8081/repository/nuget-hosted
-  sudo sed -i '$a alias dps="lcmd docker-ps"' /etc/bashrc
-  source ~/.bashrc
-  source /etc/bashrc
+  cat <<EOF | sudo tee -a /etc/profile.d/lcmd.sh
+alias dps="lcmd docker-ps"
+EOF
+  sudo chmod +x /etc/profile.d/lcmd.sh
+  source /etc/profile.d/lcmd.sh
 }
 # endregion
 
