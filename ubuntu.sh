@@ -166,7 +166,7 @@ EOF
 }
 # endregion
 
-IS_CHINA=${1:-'y'}         # 国内源 ==> y:使用
+IS_CHINA=${1:-'n'}         # 国内源 ==> y:使用
 INSTALL_DOCKER=${2:-'y'}   # 安装docker ==> y:安装
 DOCKER_PROXY=${3:-'n'}     # 安装docker proxy ==> n:无代理
 DOTNET_VERSION=${4:-'8.0'} # 安装.net sdk ==> n:不安装 多版本:'6.0|8.0'
