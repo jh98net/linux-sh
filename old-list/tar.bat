@@ -1,0 +1,1 @@
+PowerShell -Command "& {tar --exclude='./tar.bat' --exclude='./install.tar.gz' --exclude='./.git' -pczvf install.tar.gz .}"

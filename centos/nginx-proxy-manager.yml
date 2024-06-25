@@ -1,0 +1,31 @@
+version: "3.8"
+services:
+  app:
+    image: "docker.io/jc21/nginx-proxy-manager:latest"
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "81:81"
+      - "443:443"
+    environment:
+      DISABLE_IPV6: "true"
+      X_FRAME_OPTIONS: "sameorigin"
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+      - ./logrotate.custom:/etc/logrotate.d/nginx-proxy-manager
+# http://127.0.0.1:81
+# 默认管理员用户：
+# Email:    admin@example.com
+# Password: changeme
+
+# upstream
+# 1.创建data/nginx/custom/http.conf文件
+# upstream xxyy {
+#  server 172.20.1.15:8000;
+#  server 172.20.1.16:8000;
+#}
+# 2.添加host时，Advanced设置custom
+# location /{
+#  proxy_pass http://xxyy;
+#}
