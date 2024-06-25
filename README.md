@@ -3,13 +3,15 @@
 ### 1.1 国内安装
 
 ```bash
-source /dev/stdin <<<"$(curl -fsSLk https://raw.githubusercontent.com/jh98net/linux-sh/main/ubuntu.sh)" y y 'https://docker.docker-cn.com.mp' '8.0' y
+source /dev/stdin <<<"$(curl -fsSLk https://raw.githubusercontent.com/jh98net/linux-sh/main/ubuntu.sh)" \
+  y y 'https://docker.docker-cn.com.mp' '8.0' y
 ```
 
 ### 1.2 国外安装
 
 ```bash
-source /dev/stdin <<<"$(curl -fsSLk https://raw.githubusercontent.com/jh98net/linux-sh/main/ubuntu.sh)" n y n '8.0' y
+source /dev/stdin <<<"$(curl -fsSLk https://raw.githubusercontent.com/jh98net/linux-sh/main/ubuntu.sh)" \
+  n y n '8.0' y
 ```
 
 ---
@@ -51,5 +53,5 @@ echo "$(id -un) ALL=(ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers
 ROOT_PWD='root'
 echo "root:$ROOT_PWD" | sudo chpasswd
 sudo sed -i 's/^.*PermitRootLogin.*/PermitRootLogin yes/g' /etc/ssh/sshd_config
-sudo systemctl reload sshd
+sudo systemctl reload ssh
 ```
