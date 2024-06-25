@@ -36,6 +36,7 @@ init_common() {
   echo_msg "==> 安装常用软件包"
   sudo apt install -y vim wget curl lrzsz unzip git language-pack-zh-hans
   sudo apt install -y openssh-server openssh-client net-tools iputils-ping telnetd
+
   #
   echo_msg "==> 中文和时区"
   # export LANG="zh_CN.UTF-8"
@@ -134,12 +135,14 @@ install_dotnet_sdk() {
   done
 
   # .net tools
-  local dotnet_tools_path="/opt/dotnet-tools"
-  sudo mkdir -p $dotnet_tools_path
-  sudo chmod 777 $dotnet_tools_path
-  sed -i "s/^DOTNET_TOOLS_PATH=.*$/# &/g" /etc/profile.d/dotnet.sh
-  sed -i '/^# DOTNET_TOOLS_PATH=.*$/a\DOTNET_TOOLS_PATH="\/opt\/dotnet-tools"' /etc/profile.d/dotnet.sh
-  sudo chmod +x /etc/profile.d/dotnet.sh
+  export MY_DOTNET_TOOLS_PATH=/opt/dotnet-tools
+  sudo mkdir -p $MY_DOTNET_TOOLS_PATH
+  sudo chmod 777 $MY_DOTNET_TOOLS_PATH
+  #sed -i "s/^DOTNET_TOOLS_PATH=.*$/# &/g" /etc/profile.d/dotnet.sh
+  #sed -i '/^# DOTNET_TOOLS_PATH=.*$/a\DOTNET_TOOLS_PATH="\/opt\/dotnet-tools"' /etc/profile.d/dotnet.sh
+  echo 'export DOTNET_CLI_TELEMETRY_OPTOUT=true' | sudo tee -a /etc/profile.d/dotnet.sh
+  echo 'export MY_DOTNET_TOOLS_PATH=/opt/dotnet-tools' | sudo tee -a /etc/profile.d/dotnet.sh
+  echo 'export PATH=$PATH:$MY_DOTNET_TOOLS_PATH' | sudo tee -a /etc/profile.d/dotnet.sh
   source /etc/profile.d/dotnet.sh
 
   dotnet --list-sdks
@@ -152,7 +155,7 @@ install_lcmd() {
     exit 0
   fi
   echo_msg "==> .net tool - lcmd"
-  dotnet tool install TinyFx.Tools.LinuxCmd --no-cache --add-source http://192.168.1.120:8081/repository/nuget-hosted
+  dotnet tool install TinyFx.Tools.LinuxCmd --tool-path $MY_DOTNET_TOOLS_PATH --no-cache --add-source http://192.168.1.120:8081/repository/nuget-hosted
   # sudo ln -s /opt/dotnet/tools/lcmd /usr/local/bin/lcmd
   lcmd update -s http://192.168.1.120:8081/repository/nuget-hosted
   sudo sed -i '$a alias dps="lcmd docker-ps"' /etc/bashrc
