@@ -1,16 +1,18 @@
-## 1. Ubuntu
+## 1. Ubuntu 24.04 LTS
 
 ### 1.1 国内安装
 
 ```bash
-source /dev/stdin <<<"$(curl -fsSLk https://raw.githubusercontent.com/jh98net/linux-sh/main/ubuntu.sh)" \
+source /dev/stdin <<< \
+  "$(curl -fsSLk https://raw.githubusercontent.com/jh98net/linux-sh/main/ubuntu.sh)" \
   y y 'https://docker.docker-cn.com.mp' '8.0' y
 ```
 
 ### 1.2 国外安装
 
 ```bash
-source /dev/stdin <<<"$(curl -fsSLk https://raw.githubusercontent.com/jh98net/linux-sh/main/ubuntu.sh)" \
+source /dev/stdin <<< \
+  "$(curl -fsSLk https://raw.githubusercontent.com/jh98net/linux-sh/main/ubuntu.sh)" \
   n y n '8.0' y
 ```
 
@@ -19,7 +21,9 @@ source /dev/stdin <<<"$(curl -fsSLk https://raw.githubusercontent.com/jh98net/li
 ## 2. AlmaLinux
 
 ```bash
-source /dev/stdin <<<"$(curl -fsSLk https://raw.githubusercontent.com/jh98net/linux-sh/main/alma.sh)" y '-26.0.2' '2.27.0' '8.0' y
+source /dev/stdin <<<\
+  "$(curl -fsSLk https://raw.githubusercontent.com/jh98net/linux-sh/main/alma.sh)" \
+  y '-26.0.2' '2.27.0' '8.0' y
 ```
 
 ---
