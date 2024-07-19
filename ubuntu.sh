@@ -35,7 +35,7 @@ init_common() {
   #
   echo_msg "==> 安装常用软件包"
   sudo apt install -y vim wget curl lrzsz unzip git language-pack-zh-hans
-  sudo apt install -y openssh-server openssh-client net-tools iputils-ping telnetd
+  sudo apt install -y openssh-server openssh-client net-tools iputils-ping telnet
 
   #
   echo_msg "==> 中文和时区"
@@ -150,14 +150,17 @@ install_dotnet_sdk() {
 
 # 安装 .net tool - lcmd
 install_lcmd() {
-  local is_install_lcmd=$1
-  if [ "$is_install_lcmd" != "y" ]; then
+  local install_lcmd=$1
+  if [ "$install_lcmd" = "n" ]; then
     exit 0
   fi
   echo_msg "==> .net tool - lcmd"
-  dotnet tool install TinyFx.Tools.LinuxCmd --tool-path $MY_DOTNET_TOOLS_PATH --no-cache --add-source http://192.168.1.120:8081/repository/nuget-hosted
-  # sudo ln -s /opt/dotnet/tools/lcmd /usr/local/bin/lcmd
-  lcmd update -s http://192.168.1.120:8081/repository/nuget-hosted
+  if [ "$install_lcmd" = "y" ]; then
+    dotnet tool install TinyFx.Tools.LinuxCmd --tool-path $MY_DOTNET_TOOLS_PATH --no-cache
+  else
+    dotnet tool install TinyFx.Tools.LinuxCmd --tool-path $MY_DOTNET_TOOLS_PATH --no-cache --add-source $install_lcmd
+    lcmd update -s $install_lcmd
+  fi
   cat <<EOF | sudo tee -a /etc/profile.d/lcmd.sh
 alias dps="lcmd docker-ps"
 EOF
@@ -170,7 +173,7 @@ IS_CHINA=${1:-'n'}         # 国内源 ==> y:使用
 INSTALL_DOCKER=${2:-'y'}   # 安装docker ==> y:安装
 DOCKER_PROXY=${3:-'n'}     # 安装docker proxy ==> n:无代理
 DOTNET_VERSION=${4:-'8.0'} # 安装.net sdk ==> n:不安装 多版本:'6.0|8.0'
-INSTALL_LCMD=${5:-'y'}     # 安装lcmd ==> y:安装
+INSTALL_LCMD=${5:-'n'}     # 安装lcmd ==> n:不安装 y:官方source
 
 echo_msg "系统版本:"
 lsb_release -a

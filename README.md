@@ -5,7 +5,7 @@
 ```bash
 source /dev/stdin <<< \
   "$(curl -fsSLk https://raw.githubusercontent.com/jh98net/linux-sh/main/ubuntu.sh)" \
-  y y 'https://docker.docker-cn.com.mp' '8.0' y
+  y y 'https://docker.xxyy888.com' '8.0' 'http://192.168.1.120:8081/repository/nuget-hosted'
 ```
 
 ### 1.2 国外安装
@@ -38,9 +38,9 @@ source /dev/stdin <<<\
 |    2 | INSTALL_DOCKER=${2:-'y'}   | 安装 docker ==> y:安装                   |
 |    3 | DOCKER_PROXY=${3:-'n'}     | 安装 docker proxy ==> n:无代理           |
 |    4 | DOTNET_VERSION=${4:-'8.0'} | 安装.net sdk ==> n:不安装 多版本竖线分割 |
-|    5 | INSTALL_LCMD=${5:-'y'}     | 安装 lcmd ==> n:安装                     |
+|    5 | INSTALL_LCMD=${5:-'n'}     | 安装 lcmd ==> n:不安装 y:官方 source     |
 
-### 9.2 docker proxy
+### 9.2 Docker Proxy
 
 - 申请域名: https://www.registry.com.mp/ 账号: jh98net@sina.com
 - FreeCDN: https://hostry.com/ 账号: jh98net@gmail.com
@@ -50,6 +50,9 @@ source /dev/stdin <<<\
 ### 9.3 权限
 
 ```bash
+# 切换root
+sudo -i
+
 # sudo 权限
 echo "$(id -un) ALL=(ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers
 
@@ -57,5 +60,10 @@ echo "$(id -un) ALL=(ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers
 ROOT_PWD='root'
 echo "root:$ROOT_PWD" | sudo chpasswd
 sudo sed -i 's/^.*PermitRootLogin.*/PermitRootLogin yes/g' /etc/ssh/sshd_config
+sudo sed -i 's/^.*PasswordAuthentication.*/PasswordAuthentication yes/g' /etc/ssh/sshd_config
 sudo systemctl reload ssh
 ```
+
+### 9.4 tinyfx.json 说明
+
+https://raw.githubusercontent.com/jh98net/linux-sh/main/tinyfx.json
