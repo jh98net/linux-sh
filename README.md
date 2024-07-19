@@ -38,7 +38,7 @@ source /dev/stdin <<<\
 |    2 | INSTALL_DOCKER=${2:-'y'}   | 安装 docker ==> y:安装                   |
 |    3 | DOCKER_PROXY=${3:-'n'}     | 安装 docker proxy ==> n:无代理           |
 |    4 | DOTNET_VERSION=${4:-'8.0'} | 安装.net sdk ==> n:不安装 多版本竖线分割 |
-|    5 | INSTALL_LCMD=${5:-'y'}     | 安装 lcmd ==> y:安装                     |
+|    5 | INSTALL_LCMD=${5:-'y'}     | 安装 lcmd ==> n:安装                     |
 
 ### 9.2 docker proxy
 
