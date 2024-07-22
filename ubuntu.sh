@@ -194,4 +194,4 @@ init_common
 install_docker $INSTALL_DOCKER $DOCKER_PROXY
 install_dotnet_sdk $DOTNET_VERSION
 install_lcmd $INSTALL_LCMD
-install_vm_tools INSTALL_VM_TOOLS
+install_vm_tools $INSTALL_VM_TOOLS
