@@ -167,6 +167,15 @@ EOF
   sudo chmod +x /etc/profile.d/lcmd.sh
   source /etc/profile.d/lcmd.sh
 }
+
+# vm-tools
+install_vm_tools() {
+  local install_vm=$1
+  if [ "$install_vm" = "y" ]; then
+    echo_msg "==> 安装 vmware tools"
+    sudo apt install -y open-vm-tools
+  fi
+}
 # endregion
 
 IS_CHINA=${1:-'n'}         # 国内源 ==> y:使用
@@ -174,13 +183,15 @@ INSTALL_DOCKER=${2:-'y'}   # 安装docker ==> y:安装
 DOCKER_PROXY=${3:-'n'}     # 安装docker proxy ==> n:无代理
 DOTNET_VERSION=${4:-'8.0'} # 安装.net sdk ==> n:不安装 多版本:'6.0|8.0'
 INSTALL_LCMD=${5:-'n'}     # 安装lcmd ==> n:不安装 y:官方source
+INSTALL_VM_TOOLS=${6:-'n'} # 安装vm_tools ==> y:安装
 
 echo_msg "系统版本:"
 lsb_release -a
-echo_msg "执行参数: IS_CHINA=$IS_CHINA INSTALL_DOCKER=$INSTALL_DOCKER DOCKER_PROXY=$DOCKER_PROXY DOTNET_VERSION=$DOTNET_VERSION INSTALL_LCMD=$INSTALL_LCMD"
+echo_msg "执行参数: IS_CHINA=$IS_CHINA INSTALL_DOCKER=$INSTALL_DOCKER DOCKER_PROXY=$DOCKER_PROXY DOTNET_VERSION=$DOTNET_VERSION INSTALL_LCMD=$INSTALL_LCMD INSTALL_VM_TOOLS=$INSTALL_VM_TOOLS"
 
 update_repos $IS_CHINA
 init_common
 install_docker $INSTALL_DOCKER $DOCKER_PROXY
 install_dotnet_sdk $DOTNET_VERSION
 install_lcmd $INSTALL_LCMD
+install_vm_tools INSTALL_VM_TOOLS

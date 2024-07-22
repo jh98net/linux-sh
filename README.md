@@ -5,7 +5,7 @@
 ```bash
 source /dev/stdin <<< \
   "$(curl -fsSLk https://raw.githubusercontent.com/jh98net/linux-sh/main/ubuntu.sh)" \
-  y y 'https://docker.xxyy888.com' '8.0' 'http://192.168.1.120:8081/repository/nuget-hosted'
+  y y 'https://docker.xxyy888.com' '8.0' 'http://192.168.1.120:8081/repository/nuget-hosted' y
 ```
 
 ### 1.2 国外安装
@@ -13,7 +13,7 @@ source /dev/stdin <<< \
 ```bash
 source /dev/stdin <<< \
   "$(curl -fsSLk https://raw.githubusercontent.com/jh98net/linux-sh/main/ubuntu.sh)" \
-  n y n '8.0' y
+  n y n '8.0' y n
 ```
 
 ---
@@ -39,6 +39,7 @@ source /dev/stdin <<<\
 |    3 | DOCKER_PROXY=${3:-'n'}     | 安装 docker proxy ==> n:无代理           |
 |    4 | DOTNET_VERSION=${4:-'8.0'} | 安装.net sdk ==> n:不安装 多版本竖线分割 |
 |    5 | INSTALL_LCMD=${5:-'n'}     | 安装 lcmd ==> n:不安装 y:官方 source     |
+|    6 | INSTALL_VM_TOOLS=${6:-'n'} | 安装 vm_tools ==> y:安装                 |
 
 ### 9.2 Docker Proxy
 
