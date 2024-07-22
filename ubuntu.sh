@@ -72,7 +72,7 @@ install_docker() {
   local is_install_docker=$1
   local docker_proxy=$2
   if [ "$is_install_docker" != "y" ]; then
-    exit 0
+    return 0
   fi
   echo_msg "==> 安装 docker"
   # daemon.json
@@ -123,7 +123,7 @@ EOF
 install_dotnet_sdk() {
   local dotnet_version=$1
   if [ "$dotnet_version" = "n" ]; then
-    exit 0
+    return 0
   fi
 
   echo_msg "==> 安装 .net sdk"
@@ -152,7 +152,7 @@ install_dotnet_sdk() {
 install_lcmd() {
   local install_lcmd=$1
   if [ "$install_lcmd" = "n" ]; then
-    exit 0
+    return 0
   fi
   echo_msg "==> .net tool - lcmd"
   if [ "$install_lcmd" = "y" ]; then
