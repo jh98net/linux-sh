@@ -64,7 +64,7 @@ init_common() {
   sudo sed -i "s/^#SystemMaxUse=.*$/SystemMaxUse=$journal_max/" /etc/systemd/journald.conf
   sudo sed -i "s/^#ForwardToSyslog=.*$/ForwardToSyslog=no/" /etc/systemd/journald.conf
   sudo systemctl restart systemd-journald.service
-  # sudo journalctl --disk-usage
+  sudo journalctl --disk-usage
 }
 
 # 安装 docker
