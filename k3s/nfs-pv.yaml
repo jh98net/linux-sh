@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs4-pv
+  annotations:
+    pv.kubernetes.io/bound-by-controller: "yes"
+  finalizers:
+    - kubernetes.io/pv-protection
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 20Gi
+  nfs:
+    path: /root/nfs4
+    server: 192.168.1.70
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs4
+  volumeMode: Filesystem

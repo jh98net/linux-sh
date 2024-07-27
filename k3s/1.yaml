@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mynfs-pvc
+  namespace: dev
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-storageclass-provisioner
+  volumeMode: Filesystem
+  volumeName: nfs-pv-mynfs
+  resources:
+    requests:
+      storage: 100Gi
