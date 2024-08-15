@@ -34,8 +34,9 @@ EOF
 init_common() {
   #
   echo_msg "==> 安装常用软件包"
-  sudo apt install -y vim wget curl lrzsz unzip git language-pack-zh-hans
-  sudo apt install -y openssh-server openssh-client net-tools iputils-ping telnet
+  sudo apt install -y vim lrzsz unzip language-pack-zh-hans
+  sudo apt install -y wget git bash-completion
+  sudo apt install -y openssh-server openssh-client curl iproute2 iputils-ping telnet lsof traceroute dnsutils
 
   #
   echo_msg "==> 中文和时区"
@@ -43,6 +44,14 @@ init_common() {
   # sudo sed -i "s/^LANG=.*$/LANG=zh_CN.UTF-8/" /etc/default/locale
   timedatectl set-timezone Asia/Shanghai
   timedatectl status
+  sudo apt install -y chrony && systemctl enable --now chronyd
+
+  # ufw selinux swap
+  ufw disable
+  sed -ri 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config 
+  setenforce 0
+  sed -ri 's/.*swap.*/#&/' /etc/fstab
+  swapoff -a
 
   #
   echo_msg "==> 禁止AppArmor"
