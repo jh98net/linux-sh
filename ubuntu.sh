@@ -165,9 +165,9 @@ install_lcmd() {
   fi
   echo_msg "==> .net tool - lcmd"
   if [ "$install_lcmd" = "y" ]; then
-    dotnet tool install TinyFx.Tools.LinuxCmd --tool-path $MY_DOTNET_TOOLS_PATH --no-cache
+    dotnet tool install TinyFx.Tools.LinuxCmd -g --no-cache
   else
-    dotnet tool install TinyFx.Tools.LinuxCmd --tool-path $MY_DOTNET_TOOLS_PATH --no-cache --add-source $install_lcmd
+    dotnet tool install TinyFx.Tools.LinuxCmd -g --no-cache --add-source $install_lcmd
     lcmd update -s $install_lcmd
   fi
   cat <<EOF | sudo tee -a /etc/profile.d/lcmd.sh
