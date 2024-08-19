@@ -145,13 +145,9 @@ install_dotnet_sdk() {
   done
 
   # .net tools
-  export MY_DOTNET_TOOLS_PATH=/opt/dotnet-tools
-  sudo mkdir -p $MY_DOTNET_TOOLS_PATH
-  sudo chmod 777 $MY_DOTNET_TOOLS_PATH
-  #sed -i "s/^DOTNET_TOOLS_PATH=.*$/# &/g" /etc/profile.d/dotnet.sh
-  #sed -i '/^# DOTNET_TOOLS_PATH=.*$/a\DOTNET_TOOLS_PATH="\/opt\/dotnet-tools"' /etc/profile.d/dotnet.sh
+  local user_name=$(id -un)
   echo 'export DOTNET_CLI_TELEMETRY_OPTOUT=true' | sudo tee -a /etc/profile.d/dotnet.sh
-  echo 'export MY_DOTNET_TOOLS_PATH=/opt/dotnet-tools' | sudo tee -a /etc/profile.d/dotnet.sh
+  echo "export MY_DOTNET_TOOLS_PATH=/$user_name/.dotnet/tools" | sudo tee -a /etc/profile.d/dotnet.sh
   echo 'export PATH=$PATH:$MY_DOTNET_TOOLS_PATH' | sudo tee -a /etc/profile.d/dotnet.sh
   source /etc/profile.d/dotnet.sh
 
