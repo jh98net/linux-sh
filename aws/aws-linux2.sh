@@ -91,9 +91,9 @@ volumes:
 sudo apt remove mysql-client -y && sudo apt install mariadb-client -y
 
 db_name="ing"
-date="20230912"
+date="20240822"
 # --no-data 不导出任何数据 --ignore-table忽略表
-mysqldump -h my-db.cvn4awncphwh.us-west-2.rds.amazonaws.com \
+mysqldump -h my-ing.cluster-ro-cvn4awncphwh.us-west-2.rds.amazonaws.com \
   -u admin -p'jfjptKzEg2JRMsnp3Xud0' \
   --ssl-mode=DISABLED --set-gtid-purged=OFF \
   --single-transaction --routines \
@@ -101,8 +101,8 @@ mysqldump -h my-db.cvn4awncphwh.us-west-2.rds.amazonaws.com \
   ${db_name} | sed -e 's/DEFINER[ ]*=[ ]*[^*]*\*/\*/' | gzip >${db_name}-${date}.sql.gz
 
 db_name="gdb"
-date="20230912"
-mysqldump -h my-db.cvn4awncphwh.us-west-2.rds.amazonaws.com \
+date="20240822"
+mysqldump -h my-ing.cluster-ro-cvn4awncphwh.us-west-2.rds.amazonaws.com \
   -u admin -p'jfjptKzEg2JRMsnp3Xud0' \
   --ssl-mode=DISABLED --set-gtid-purged=OFF \
   --single-transaction --routines \

@@ -42,10 +42,10 @@ init_common() {
   #
   echo_msg "==> 中文和时区"
   # export LANG="zh_CN.UTF-8"
-  # sudo sed -i "s/^LANG=.*$/LANG=zh_CN.UTF-8/" /etc/default/locale
+  sudo sed -i "s/^LANG=.*$/LANG=zh_CN.UTF-8/" /etc/default/locale
   timedatectl set-timezone Asia/Shanghai
   timedatectl status
-  sudo apt install -y chrony && systemctl enable --now chronyd
+  # sudo apt install -y chrony && systemctl enable --now chronyd
 
   # ufw selinux swap
   ufw disable
