@@ -5,7 +5,7 @@
 ```bash
 source /dev/stdin <<< \
   "$(curl -fsSLk https://raw.githubusercontent.com/jh98net/linux-sh/main/ubuntu.sh)" \
-  y y 'https://nexus.jh98net.com/nexus/repository/docker-group' '8.0' 'https://nexus.jh98net.com/nexus/repository/nuget-hosted' y
+  y y 'https://nexus.jh98net.com/nexus/repository/docker-group' '8.0' 'https://nexus.jh98net.com/nexus/repository/nuget-hosted' n
 ```
 
 ### 1.2 国外安装

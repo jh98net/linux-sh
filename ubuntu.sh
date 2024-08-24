@@ -49,7 +49,7 @@ init_common() {
 
   # ufw selinux swap
   ufw disable
-  sed -ri 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config 
+  sed -ri 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
   setenforce 0
   sed -ri 's/.*swap.*/#&/' /etc/fstab
   swapoff -a
@@ -163,13 +163,16 @@ install_lcmd() {
   echo_msg "==> .net tool - lcmd"
   if [ "$install_lcmd" = "y" ]; then
     dotnet tool install TinyFx.Tools.LinuxCmd -g --no-cache
-  else
-    dotnet tool install TinyFx.Tools.LinuxCmd -g --no-cache --add-source $install_lcmd
-    lcmd update -s $install_lcmd
-  fi
-  cat <<EOF | sudo tee -a /etc/profile.d/lcmd.sh
+    cat <<EOF | sudo tee -a /etc/profile.d/lcmd.sh
 alias dps="lcmd docker-ps"
 EOF
+  else
+    dotnet tool install TinyFx.Tools.LinuxCmd -g --no-cache --add-source $install_lcmd
+    cat <<EOF | sudo tee -a /etc/profile.d/lcmd.sh
+export NUGET_SOURCE=$install_lcmd
+alias dps="lcmd docker-ps"
+EOF
+  fi
   sudo chmod +x /etc/profile.d/lcmd.sh
   source /etc/profile.d/lcmd.sh
 }
