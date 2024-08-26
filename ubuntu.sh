@@ -60,6 +60,11 @@ init_common() {
   sudo systemctl disable apparmor
 
   #
+  echo_msg "==> vm.max_map_count=262144"
+  sysctl -w vm.max_map_count=262144
+  echo 'vm.max_map_count=262144' | sudo tee -a /etc/sysctl.conf
+
+  #
   echo_msg "==> net.ipv4.ip_forward"
   sudo sed -i '/#net.ipv4.ip_forward=/ a\net.ipv4.ip_forward=1' /etc/sysctl.conf
   sudo sysctl -w net.ipv4.ip_forward=1
