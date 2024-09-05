@@ -36,7 +36,7 @@ init_common() {
   echo_msg "==> 安装常用软件包"
   sudo apt remove -y needrestart
   sudo apt install -y vim lrzsz unzip language-pack-zh-hans
-  sudo apt install -y wget git bash-completion
+  sudo apt install -y wget git bash-completion nfs-common
   sudo apt install -y openssh-server openssh-client curl iproute2 iputils-ping telnet lsof traceroute dnsutils
 
   #

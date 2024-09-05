@@ -90,6 +90,18 @@ volumes:
 # 导出导入数据
 sudo apt remove mysql-client -y && sudo apt install mariadb-client -y
 
+out_dir="/home/ubuntu/mysql_bak/20240829"
+db_name="ing"
+dt_name="l_activity"
+mysqldump -h my-ing.cluster-ro-cvn4awncphwh.us-west-2.rds.amazonaws.com -u admin -p'jfjptKzEg2JRMsnp3Xud0' \
+  --single-transaction --add-drop-table \
+  ${db_name} ${dt_name} | sed -e 's/DEFINER[ ]*=[ ]*[^*]*\*/\*/' | gzip >${out_dir}/${dt_name}.sql.gz
+
+out_dir="/root/temp"
+db_name="ing_main"
+dt_name="l_activity"
+gunzip <${out_dir}/${dt_name}.sql.gz | mysql -h192.168.1.60 -uroot -pN1rbTJScbXAbUnRa ${db_name}
+
 db_name="ing"
 date="20240822"
 # --no-data 不导出任何数据 --ignore-table忽略表
