@@ -1,6 +1,0 @@
-Volume:        nfs-pv-mynfs
-Annotations:   pv.kubernetes.io/bind-completed: yes
-Used By:       eip-nfs-mynfs-586ddbcd8f-tqjtg
-
-
-kubectl patch pvc -n kube-system nfs-pvc-mynfs -p '{"metadata": {"namespace": "dev"}'

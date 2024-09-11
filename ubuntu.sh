@@ -35,39 +35,91 @@ init_common() {
   #
   echo_msg "==> 安装常用软件包"
   sudo apt remove -y needrestart
-  sudo apt install -y vim lrzsz unzip language-pack-zh-hans
-  sudo apt install -y wget git bash-completion nfs-common
-  sudo apt install -y openssh-server openssh-client curl iproute2 iputils-ping telnet lsof traceroute dnsutils
+  sudo apt install -y bash-completion language-pack-zh-hans
+  sudo apt install -y vim lrzsz unzip lsof parted wget
+  sudo apt install -y git nfs-common
+  sudo apt install -y curl iproute2 iputils-ping telnet traceroute dnsutils net-tools
 
   #
   echo_msg "==> 中文和时区"
-  # export LANG="zh_CN.UTF-8"
   sudo sed -i "s/^LANG=.*$/LANG=zh_CN.UTF-8/" /etc/default/locale
   timedatectl set-timezone Asia/Shanghai
   timedatectl status
-  # sudo apt install -y chrony && systemctl enable --now chronyd
 
-  # ufw selinux swap
-  ufw disable
+  # 禁用ufw selinux swap
+  systemctl stop ufw.service
+  systemctl disable ufw.service
   sed -ri 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
   setenforce 0
   sed -ri 's/.*swap.*/#&/' /etc/fstab
   swapoff -a
 
-  #
-  echo_msg "==> 禁止AppArmor"
-  sudo systemctl stop apparmor
-  sudo systemctl disable apparmor
+  # 打开数
+  cat > /etc/security/limits.conf <<EOF
+* soft noproc 65535
+* hard noproc 65535
 
-  #
-  echo_msg "==> vm.max_map_count=262144"
-  sysctl -w vm.max_map_count=262144
-  echo 'vm.max_map_count=262144' | sudo tee -a /etc/sysctl.conf
+* soft nofile 65535
+* hard nofile 65535
+EOF
+  echo 'ulimit -SHn 65535' >> /etc/profile
+  ulimit -n 65535
+  ulimit -u 65536
 
-  #
-  echo_msg "==> net.ipv4.ip_forward"
-  sudo sed -i '/#net.ipv4.ip_forward=/ a\net.ipv4.ip_forward=1' /etc/sysctl.conf
-  sudo sysctl -w net.ipv4.ip_forward=1
+  # 内核优化
+  cat >> /etc/sysctl.conf <<EOF
+# 缓存优化
+vm.swappiness=0
+
+# tcp优化
+net.ipv4.tcp_max_tw_buckets=5000
+net.ipv4.tcp_max_syn_backlog=16384
+net.ipv4.tcp_syncookies=1
+net.ipv4.tcp_tw_reuse=1
+net.ipv4.tcp_tw_recycle=1
+net.ipv4.tcp_fin_timeout=10
+
+net.ipv4.tcp_keepalive_time=600
+net.ipv4.tcp_keepalive_intvl=30
+net.ipv4.tcp_keepalive_probes=3
+
+net.ipv6.conf.all.disable_ipv6=1
+net.ipv6.conf.default.disable_ipv6=1
+net.ipv6.conf.lo.disable_ipv6=1
+net.ipv4.neigh.default.gc_stale_time=120
+net.ipv4.conf.all.rp_filter=0 
+net.ipv4.conf.default.rp_filter=0
+net.ipv4.conf.default.arp_announce=2
+net.ipv4.conf.lo.arp_announce=2
+net.ipv4.conf.all.arp_announce=2
+net.ipv4.ip_local_port_range=1024 65000
+
+net.ipv4.ip_forward=1
+net.ipv4.tcp_syncookies=1
+net.ipv4.tcp_synack_retries=2
+
+net.bridge.bridge-nf-call-ip6tables=1
+net.bridge.bridge-nf-call-iptables=1
+net.netfilter.nf_conntrack_max=2310720
+net.ipv6.neigh.default.gc_thresh1=8192
+net.ipv6.neigh.default.gc_thresh2=32768
+net.ipv6.neigh.default.gc_thresh3=65536
+net.core.netdev_max_backlog=16384
+net.core.rmem_max=16777216 
+net.core.wmem_max=16777216
+
+net.core.somaxconn = 32768 
+fs.inotify.max_user_instances=8192 
+fs.inotify.max_user_watches=524288 
+fs.file-max=52706963
+fs.nr_open=52706963
+kernel.pid_max = 4194303
+net.bridge.bridge-nf-call-arptables=1
+
+vm.overcommit_memory=1 
+vm.panic_on_oom=0 
+vm.max_map_count=262144
+EOF
   sudo sysctl -p /etc/sysctl.conf
 
   #
@@ -209,3 +261,5 @@ install_docker $INSTALL_DOCKER $DOCKER_PROXY
 install_dotnet_sdk $DOTNET_VERSION
 install_lcmd $INSTALL_LCMD
 install_vm_tools $INSTALL_VM_TOOLS
+
+# /etc/netplan/50-cloud-init.yaml 修改IP

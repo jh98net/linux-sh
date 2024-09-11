@@ -1,3 +1,11 @@
+# 10.250.128.6 my-public
+openvpn kuboard nacos nginx-proxy-manager quartzui
+
+10.250.128.11 k3s-master1
+10.250.128.21 k3s-worker1
+10.250.128.71 k3s-middle1
+10.250.128.81 k3s-msyql1
+
 # nfs server
 NFS_PATH=${4:-'/root/nfs4'}
 
@@ -27,3 +35,9 @@ sudo mount -t nfs 10.2.0.3:/root/nfs4 /root/nfs4
 sudo vim /etc/fstab
 10.2.0.3:/root/nfs4 /root/nfs4 nfs defaults 0 0
 mount -a
+
+# 自动补全
+apt install -y bash-completion
+source /usr/share/bash-completion/bash_completion
+source <(kubectl completion bash)
+echo "source <(kubectl completion bash)" >>~/.bashrc
