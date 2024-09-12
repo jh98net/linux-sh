@@ -1,43 +1,40 @@
-# 10.250.128.6 my-public
-openvpn kuboard nacos nginx-proxy-manager quartzui
-
-10.250.128.11 k3s-master1
-10.250.128.21 k3s-worker1
-10.250.128.71 k3s-middle1
-10.250.128.81 k3s-msyql1
-
-# nfs server
-NFS_PATH=${4:-'/root/nfs4'}
-
+# k3s-master 10.250.128.11
+# 1. nfs server
+NFS_PATH='/root/nfs4'
 apt install -y nfs-kernel-server
 mkdir -p $NFS_PATH
 chown -R nobody:nogroup $NFS_PATH
 chmod 777 $NFS_PATH
-sudo sed -i '1i\${NFS_PATH} *(rw,sync,no_subtree_check)' /etc/exports
+echo "$NFS_PATH *(rw,sync,no_subtree_check)" | sudo tee -a /etc/exports
 sudo exportfs -a
 sudo systemctl restart nfs-server
-
-# autok3s
-sudo docker run -d --privileged=true --restart=always --name autok3s -p 8080:8080 cnrancher/autok3s:v0.9.3
-
-# nacos
-sudo docker run -d --privileged=true --restart=always \
-  --name nacos -p 8848:8848 -p 9848:9848 \
-  -m 2g -e JVM_XMS=1g -e JVM_XMX=1g -e JVM_XMN=512m \
-  -e MODE=standalone -e PREFER_HOST_MODE=hostname -e TZ=Asia/Shanghai \
-  -v /root/apps/nacos/logs:/home/nacos/logs \
-  nacos/nacos-server:v2.4.1
-
-# nfs client
-apt update && sudo apt install nfs-common
-mkdir /root/nfs4
-sudo mount -t nfs 10.2.0.3:/root/nfs4 /root/nfs4
-sudo vim /etc/fstab
-10.2.0.3:/root/nfs4 /root/nfs4 nfs defaults 0 0
-mount -a
-
+# 2. k3s server
+curl -sfL https://get.k3s.io | sh -
 # 自动补全
 apt install -y bash-completion
 source /usr/share/bash-completion/bash_completion
 source <(kubectl completion bash)
 echo "source <(kubectl completion bash)" >>~/.bashrc
+# 3. 获取node token
+cat /var/lib/rancher/k3s/server/node-token
+
+# k3s-worker1 10.250.128.21
+K3S_SERVER='10.250.128.11'
+K3S_TOKEN=''
+curl -sfL https://get.k3s.io | K3S_URL=https://$K3S_SERVER:6443 K3S_TOKEN=$K3S_TOKEN sh -
+# nfs client
+apt update && sudo apt install -y nfs-common
+mkdir /root/nfs4
+sudo mount -t nfs $K3S_SERVER:/root/nfs4 /root/nfs4
+echo "$K3S_SERVER:/root/nfs4 /root/nfs4 nfs defaults 0 0" | sudo tee -a /etc/fstab
+mount -a
+
+10.250.128.6 my-public
+# openvpn kuboard nacos nginx-proxy-manager quartzui
+
+10.250.128.71 k3s-middle1
+# redis rebitmq elk
+10.250.128.81 k3s-msyql1
+
+# autok3s
+sudo docker run -d --privileged=true --restart=always --name autok3s -p 8080:8080 cnrancher/autok3s:v0.9.3

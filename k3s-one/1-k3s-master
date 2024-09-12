@@ -1,0 +1,14 @@
+# k3s-master1 10.250.128.11
+
+# 1. nfs server
+NFS_PATH='/root/nfs4'
+apt install -y nfs-kernel-server
+mkdir -p $NFS_PATH
+chown -R nobody:nogroup $NFS_PATH
+chmod 777 $NFS_PATH
+echo "$NFS_PATH *(rw,sync,no_subtree_check)" | sudo tee -a /etc/exports
+sudo exportfs -a
+sudo systemctl restart nfs-server
+
+# 2. k3s server
+curl -sfL https://get.k3s.io | sh -
