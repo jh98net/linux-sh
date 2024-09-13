@@ -38,3 +38,6 @@ mount -a
 
 # autok3s
 sudo docker run -d --privileged=true --restart=always --name autok3s -p 8080:8080 cnrancher/autok3s:v0.9.3
+
+# 设置taefik 添加
+- '--entrypoints.web.forwardedHeaders.insecure=true' - '--entrypoints.websecure.forwardedHeaders.insecure=true'
