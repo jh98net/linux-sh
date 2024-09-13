@@ -51,3 +51,6 @@ sudo docker run -d \
 
 # autok3s
 sudo docker run -d --privileged=true --restart=always --name autok3s -p 8080:8080 cnrancher/autok3s:v0.9.3
+
+# traefik
+- '--entrypoints.web.forwardedHeaders.insecure=true' - '--entrypoints.websecure.forwardedHeaders.insecure=true'
